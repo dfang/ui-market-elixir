@@ -13,10 +13,10 @@ config :pragmatic,
 # Configures the endpoint
 config :pragmatic, PragmaticWeb.Endpoint,
   url: [host: "localhost"],
-  secret_key_base: "XF8PoVb+fuCvQvHbHVAIU1OLl4LVuXFG1gIlAUvzox+K9L39Vx3aSY6fRyJpTs/N",
+  secret_key_base: "R1EflKxHcsDOmDF2m5CcV63HIaMT8V02SFN8HwU2kZ8lnFwms+Qb2VCv4/PV+WlY",
   render_errors: [view: PragmaticWeb.ErrorView, accepts: ~w(html json), layout: false],
   pubsub_server: Pragmatic.PubSub,
-  live_view: [signing_salt: "FI25FgDA"]
+  live_view: [signing_salt: "rRwFneIy"]
 
 # Configures Elixir's Logger
 config :logger, :console,
