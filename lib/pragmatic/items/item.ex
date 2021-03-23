@@ -12,7 +12,11 @@ defmodule Pragmatic.Items.Item do
     field :title, :string
     field :views, :integer
     field :zip, :string
-
+    
+    belongs_to :category, Items
+    belongs_to :industry, Items
+    field :filetype, :map, default: %{}
+  
     timestamps()
   end
 

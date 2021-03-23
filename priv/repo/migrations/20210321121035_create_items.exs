@@ -12,9 +12,11 @@ defmodule Pragmatic.Repo.Migrations.CreateItems do
       add :views, :integer
       add :downloads, :integer
       add :likes, :integer
+      add :filetype, :json
+      add :category_id, :integer
+      add :industry_id, :integer
 
       timestamps()
     end
-
   end
 end

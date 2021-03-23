@@ -1,66 +1,43 @@
 <div class="filters-component w-full mx-auto px-12">
-
+<form phx-change="filter" phx-throttle="1000">
   <div class="flex flex-row items-center mb-8">
-    <div class="text-xl">资源类型</div>
+    <div class="text-xl">类型</div>
     <div class="filters ml-10">
-      <span class="mr-10">UI</span>
-      <span class="mr-10">图标</span>
-      <span class="mr-10">背景</span>
-      <span class="mr-10">插画</span>
-      <span class="mr-10">平面广告</span>
-      <span class="mr-10">动效</span>
-      <span class="mr-10">3D</span>
+      <%= for {k,v} <- @type_options  do %>
+        <input class="w-0 opacity-0" type="radio" name="type" id="t<%= k %>" value="<%= v %>" <%= if k == 0, do: "checked" %>>
+        <label class="mx-2 py-2 px-3" for="t<%= k %>"><%= v %></label>
+      <% end %>
     </div>
   </div>
-
 
   <div class="flex flex-row items-center mb-8">
     <div class="text-xl">行业</div>
     <div class="filters ml-10">
-      <span class="mr-10">不限</span>
-      <span class="mr-10">电商微商</span>
-      <span class="mr-10">IT互联网</span>
-      <span class="mr-10">地产家居</span>
-      <span class="mr-10">政府公益</span>
-      <span class="mr-10">教育培训</span>
-      <span class="mr-10">文化娱乐</span>
-      <span class="mr-10">酒店旅游</span>
-      <span class="mr-10">医疗医药</span>
-      <span class="mr-10">生活服务</span>
-      <span class="mr-10">美容健身</span>
+      <%= for {k,v} <- @industry_options  do %>
+        <input class="w-0 opacity-0" type="radio" name="industry" id="i<%= k %>" value="<%= v %>" <%= if k == 0, do: "checked" %>>
+        <label class="mx-2 py-2 px-3" for="i<%= k %>"><%= v %></label>
+      <% end %>
     </div>
   </div>
 
   <div class="flex flex-row items-center mb-8">
     <div class="text-xl">格式</div>
     <div class="filters ml-10">
-      <span class="mr-10">不限</span>
-      <span class="mr-10">PSD</span>
-      <span class="mr-10">AI</span>
-      <span class="mr-10">XD</span>
-      <span class="mr-10">Sketch</span>
-      <span class="mr-10">EPS</span>
-      <span class="mr-10">C4D</span>
-      <span class="mr-10">HTML</span>
-      <span class="mr-10">AEP</span>
-      <span class="mr-10">JPG</span>
-      <span class="mr-10">PNG</span>
-      <span class="mr-10">Figma</span>
-      <span class="mr-10">MAX</span>
-      <span class="mr-10">OBJ</span>
-      <span class="mr-10">MA</span>
+      <%= for {k,v} <- @format_options  do %>
+        <input class="w-0 opacity-0" type="radio" name="format" id="f<%= k %>" value="<%= v %>" <%= if k == 0, do: "checked" %>>
+        <label class="mx-2 py-2 px-3" for="f<%= k %>"><%= v %></label>
+      <% end %>
     </div>
   </div>
-
 
   <div class="flex flex-row items-center mb-8">
     <div class="text-xl">排序</div>
     <div class="filters ml-10">
-      <span class="mr-10">全部</span>
-      <span class="mr-10">推荐</span>
-      <span class="mr-10">最新</span>
-      <span class="mr-10">最热</span>
-      <span class="mr-10">下载量</span>
+      <%= for {k,v} <- @sort_options  do %>
+        <input class="w-0 opacity-0" type="radio" name="sort" id="s<%= k %>" value="<%= v %>" <%= if k == 0, do: "checked" %>>
+        <label class="mx-2 py-2 px-3" for="s<%= k %>"><%= v %></label>
+      <% end %>
     </div>
   </div>
+</form>
 </div>

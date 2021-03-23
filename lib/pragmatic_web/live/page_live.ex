@@ -8,7 +8,7 @@ defmodule PragmaticWeb.PageLive do
 
   @impl true
   def handle_event("toggle", %{"tab" => tab}, socket) do
-    IO.puts tab
+    IO.puts(tab)
     socket = assign(socket, visible: tab)
     {:noreply, socket}
   end
