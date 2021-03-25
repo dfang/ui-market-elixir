@@ -31,6 +31,20 @@ defmodule PragmaticWeb.Router do
   #   pipe_through :api
   # end
 
+  scope "/graphql" do
+    pipe_through :api
+
+    forward "/", Absinthe.Plug, schema: PragmaticWeb.Schema
+  end
+
+  if Mix.env == :dev do
+    forward "/graphiql", 
+      Absinthe.Plug.GraphiQL,
+      schema: PragmaticWeb.Schema
+      # interface: :simple
+      # context: %{pubsub: PragmaticWeb.Endpoint}
+  end
+
   # Enables LiveDashboard only for development
   #
   # If you want to use the LiveDashboard in production, you should put

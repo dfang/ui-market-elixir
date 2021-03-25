@@ -52,9 +52,13 @@ defmodule Pragmatic.MixProject do
       {:telemetry_poller, "~> 0.4"},
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
-      {:absinthe, "~> 1.6"},
-      {:absinthe_plug, "~> 1.5"},
-      {:absinthe_phoenix, "~> 2.0"},
+      
+      # GraphQL API Support
+      {:absinthe, "~> 1.4"},
+      {:absinthe_plug, "~> 1.4"},
+      {:dataloader, "~> 1.0.0"},
+      {:absinthe_gen, "~> 0.2"},
+
       {:httpoison, "~> 1.8"},
       {:tesla, "~> 1.4.0"},
       {:faker, "~> 0.16.0", only: :dev},

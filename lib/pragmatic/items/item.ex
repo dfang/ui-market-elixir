@@ -5,13 +5,13 @@ defmodule Pragmatic.Items.Item do
   schema "items" do
     field :cover, :string
     field :detail, :string
+    field :zip, :string
     field :downloads, :integer
     field :draft, :boolean, default: false
     field :featured, :boolean, default: false
     field :likes, :integer
     field :title, :string
     field :views, :integer
-    field :zip, :string
 
     belongs_to :category, Items
     belongs_to :industry, Items
