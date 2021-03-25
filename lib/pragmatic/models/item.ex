@@ -1,4 +1,4 @@
-defmodule Pragmatic.Items.Item do
+defmodule Pragmatic.Models.Item do
   use Ecto.Schema
   import Ecto.Changeset
 

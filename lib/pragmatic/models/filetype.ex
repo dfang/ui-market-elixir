@@ -1,4 +1,4 @@
-defmodule Pragmatic.Data.Filetype do
+defmodule Pragmatic.Models.Filetype do
   use Ecto.Schema
   import Ecto.Changeset
 

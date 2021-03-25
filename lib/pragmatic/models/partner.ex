@@ -1,4 +1,4 @@
-defmodule Pragmatic.Data.Partner do
+defmodule Pragmatic.Models.Partner do
   use Ecto.Schema
   import Ecto.Changeset
 

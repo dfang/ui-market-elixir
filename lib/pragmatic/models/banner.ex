@@ -1,4 +1,4 @@
-defmodule Pragmatic.Data.Banner do
+defmodule Pragmatic.Models.Banner do
   use Ecto.Schema
   import Ecto.Changeset
 

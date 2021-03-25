@@ -10,10 +10,10 @@
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
 
-alias Pragmatic.Items.Item
-alias Pragmatic.Items.Industry
-alias Pragmatic.Items.Category
-alias Pragmatic.Data.Filetype
+alias Pragmatic.Models.Item
+alias Pragmatic.Models.Industry
+alias Pragmatic.Models.Category
+alias Pragmatic.Models.Filetype
 alias Pragmatic.Repo
 import Ecto.{Changeset, Query}
 

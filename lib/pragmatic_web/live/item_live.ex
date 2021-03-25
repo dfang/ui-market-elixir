@@ -1,10 +1,10 @@
 defmodule PragmaticWeb.ItemLive do
   use PragmaticWeb, :live_view
 
-  alias Pragmatic.Items.Item
-  alias Pragmatic.Items.Category
-  alias Pragmatic.Items.Industry
-  alias Pragmatic.Data.Filetype
+  alias Pragmatic.Models.Item
+  alias Pragmatic.Models.Category
+  alias Pragmatic.Models.Industry
+  alias Pragmatic.Models.Filetype
 
 
   def render(assigns) do

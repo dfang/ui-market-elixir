@@ -1,4 +1,4 @@
-defmodule Pragmatic.Data.Link do
+defmodule Pragmatic.Models.Link do
   use Ecto.Schema
   import Ecto.Changeset
 

@@ -1,6 +1,6 @@
 defmodule Pragmatic.Item do
   import Ecto.Query, warn: false
-  alias Pragmatic.Items.Item
+  alias Pragmatic.Models.Item
 
 
   def list_items do

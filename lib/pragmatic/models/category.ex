@@ -1,8 +1,8 @@
-defmodule Pragmatic.Items.Industry do
+defmodule Pragmatic.Models.Category do
   use Ecto.Schema
   import Ecto.Changeset
 
-  schema "industries" do
+  schema "categories" do
     field :description, :string
     field :name, :string
 
@@ -10,8 +10,8 @@ defmodule Pragmatic.Items.Industry do
   end
 
   @doc false
-  def changeset(industry, attrs) do
-    industry
+  def changeset(category, attrs) do
+    category
     |> cast(attrs, [:name, :description])
     |> validate_required([:name])
   end
