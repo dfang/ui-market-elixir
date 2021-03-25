@@ -9,6 +9,5 @@ defmodule Pragmatic.Repo.Migrations.CreateBanners do
 
       timestamps()
     end
-
   end
 end

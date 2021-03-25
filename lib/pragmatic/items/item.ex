@@ -12,18 +12,18 @@ defmodule Pragmatic.Items.Item do
     field :title, :string
     field :views, :integer
     field :zip, :string
-    
+
     belongs_to :category, Items
     belongs_to :industry, Items
     field :filetype, :map, default: %{}
-  
+
     timestamps()
   end
 
   @doc false
   def changeset(item, attrs) do
     item
-    |> cast(attrs, [:title, :cover, :detail, :zip, :featured, :draft, :views, :downloads, :likes])
+    |> cast(attrs, [:title, :cover, :detail, :zip, :featured, :draft, :views, :downloads, :likes, :category_id, :industry_id])
     |> validate_required([:title, :cover, :detail, :zip])
   end
 end

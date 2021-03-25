@@ -1,111 +1,149 @@
 defmodule PragmaticWeb.DiscoverLive do
   use PragmaticWeb, :live_view
 
+  alias Pragmatic.Items.Item
+  alias Pragmatic.Items.Category
+  alias Pragmatic.Items.Industry
+  alias Pragmatic.Data.Filetype
+
+  import Pragmatic.Repo
+  import Ecto.{Changeset, Query}
+  alias Pragmatic.Repo
+
   def mount(_params, _session, socket) do
     socket =
       assign(socket,
-        type_options: type_options(),
-        industry_options: industry_options(),
-        format_options: format_options(),
-        sort_options: sort_options()
+        # type_options: type_options(),
+        # industry_options: industry_options(),
+        # format_options: format_options(),
+        # sort_options: sort_options(),
+        categories: categories(),
+        industries: industries(),
+        filetypes: filetypes(),
+        sorts: sorts(),
+        # defaults: defaults,
+        category_id: 0,
+        industry_id: 0,
+        filetype: 0,
+        sort: 0,
+        items: []
       )
 
     {:ok, socket}
   end
 
-  # def render(assigns) do
-  #   ~L"""
-  #   discover
-  #   """
+  defp categories do
+    query = from c in Category, select: {c.id, c.name}
+    # %{0 => "不限"} |> Enum.concat(Repo.all(query) |> Enum.into(%{}))
+    Repo.all(query) |> Enum.into(%{}) |> Enum.concat(%{0 => "不限"}) |> Enum.sort()
+  end
+
+  defp industries do
+    query = from c in Industry, select: {c.id, c.name}, limit: 10
+    Repo.all(query) |> Enum.into(%{}) |> Enum.concat(%{0 => "不限"}) |> Enum.sort()
+  end
+
+  defp filetypes do
+    query = from c in Filetype, select: {c.id, c.ext}, limit: 10
+    Repo.all(query) |> Enum.into(%{}) |> Enum.concat(%{0 => "不限"}) |> Enum.sort()
+  end
+
+  defp sorts do
+    [
+      {0, "最新"},
+      {1, "推荐"},
+      {2, "最热"},
+      {3, "下载量"}
+    ]
+  end
+
+
+  
+  # def handle_params(%{"category_id" => category_id}, _url, socket ) do
+  #     IO.puts category_id
+  #     # IO.puts industry_id
+  #     IO.inspect socket.assigns
+  #     socket = assign(socket, category_id: category_id)
+  #     IO.inspect socket.assigns
+  #     {:noreply, socket}
   # end
 
-  def handle_event(
-        "filter",
-        %{"format" => format, "type" => type, "industry" => industry, "sort" => sort},
-        socket
-      ) do
-    IO.puts(type)
-    IO.puts(format)
-    IO.puts(industry)
-    IO.puts(sort)
-    # IO.puts params
+  # def handle_params(%{"industry_id" => industry_id}, _url, socket ) do
+  #     IO.puts industry_id
+  #     # IO.puts industry_id
+  #     # IO.inspect socket.assigns
+  #     socket = assign(socket, industry_id: industry_id)
+  #     # IO.inspect socket.assigns
+
+  #     # socket =
+  #     #   push_patch(socket,
+  #     #     to:
+  #     #       Routes.live_path(
+  #     #         socket,
+  #     #         __MODULE__,
+  #     #         category_id: socket.assigns.category_id,
+  #     #         industry_id: industry_id
+  #     #       )
+  #     #   )
+
+  #     {:noreply, socket}
+  # end
+
+  def handle_params(%{"category_id" => category_id, "industry_id" => industry_id, "sort" => sort}, _url, socket ) do
+    IO.puts "params"
+    IO.puts category_id
+    IO.puts industry_id
+    IO.puts sort
+    items = filter_items(%{category_id: category_id, industry_id: industry_id, sort: sort})
+    # IO.inspect(items)
+    socket =
+      assign(socket,
+        # category_id: category_id,
+        # industry_id: industry_id,
+
+        category_id: String.to_integer(category_id),
+        industry_id: String.to_integer(industry_id),
+        # filetype: String.to_integer(filetype),
+        sort: String.to_integer(sort),
+        items: items,
+        filetype: "",
+      )
+
     {:noreply, socket}
   end
 
-  defp price_radio(assigns) do
-    assigns = Enum.into(assigns, %{})
-
-    ~L"""
-    <input type="radio" id="<%= @price %>"
-           name="prices[]" value="<%= @price %>"
-           <%= if @checked, do: "checked" %>/>
-    <label for="<%= @price %>"><%= @price %></label>
-    """
+  def handle_params(_, _url, socket) do
+    {:noreply, socket}
   end
 
-  defp type_options do
-    a = [
-      "不限",
-      "UI",
-      "图标",
-      "背景",
-      "插画",
-      "平面广告",
-      "动效",
-      "3D"
-    ]
+  defp filter_items(%{category_id: category_id, industry_id: industry_id, sort: sort}) do
+    if category_id == 0 do
+      category_id = nil
+    end
 
-    0..length(a) |> Enum.map(fn x -> x end) |> Enum.zip(a) |> Enum.into(%{})
-  end
+    if industry_id == 0 do
+      industry_id = nil
+    end
+    # {0, "最新"},
+    # {1, "推荐"},
+    # {2, "最热"},
+    # {3, "下载量"}
+    order = case sort do
+      0 -> :inserted_at
+      1 -> :featured
+      2 -> :likes
+      3 -> :downloads
+      _ -> :inserted_at
+    end
 
-  defp industry_options do
-    a = [
-      "不限",
-      "电商微商",
-      "IT互联网",
-      "地产家居",
-      "政府公益",
-      "教育培训",
-      "文化娱乐",
-      "酒店旅游",
-      "医疗医药",
-      "生活服务",
-      "美容健身"
-    ]
-
-    0..length(a) |> Enum.map(fn x -> x end) |> Enum.zip(a) |> Enum.into(%{})
-  end
-
-  defp format_options do
-    a = [
-      "不限",
-      "PSD",
-      "AI",
-      "XD",
-      "Sketch",
-      "EPS",
-      "C4D",
-      "HTML",
-      "AEP",
-      "JPG",
-      "PNG",
-      "Figma",
-      "MAX",
-      "OBJ",
-      "MA"
-    ]
-
-    0..length(a) |> Enum.map(fn x -> x end) |> Enum.zip(a) |> Enum.into(%{})
-  end
-
-  defp sort_options do
-    a = [
-      "最新",
-      "推荐",
-      "最热",
-      "下载量"
-    ]
-
-    0..length(a) |> Enum.map(fn x -> x end) |> Enum.zip(a) |> Enum.into(%{})
+    IO.puts "order"
+    IO.puts order
+    
+    base_query = from i in Item
+    base_query |> 
+          where([i], category_id: ^category_id) |>
+          where([i], industry_id: ^industry_id) |>
+          order_by(desc: ^order) |>
+          Repo.all
   end
 end

@@ -1,43 +1,81 @@
 <div class="filters-component w-full mx-auto px-12">
-<form phx-change="filter" phx-throttle="1000">
   <div class="flex flex-row items-center mb-8">
-    <div class="text-xl">类型</div>
-    <div class="filters ml-10">
-      <%= for {k,v} <- @type_options  do %>
-        <input class="w-0 opacity-0" type="radio" name="type" id="t<%= k %>" value="<%= v %>" <%= if k == 0, do: "checked" %>>
-        <label class="mx-2 py-2 px-3" for="t<%= k %>"><%= v %></label>
-      <% end %>
-    </div>
+      <div class="text-xl">类型</div>
+      <div class="filters ml-10">
+          <%= for {k,v} <- @categories  do %>
+              <%= live_patch v, to: Routes.live_path(
+                          @socket, 
+                          __MODULE__,
+                          category_id: k,
+                          industry_id: @industry_id,
+                          sort: @sort
+                      ), 
+                      class: if @category_id == k, do: "mx-2 py-2 px-3 active", else: "mx-2 py-2 px-3"
+              %>
+          <% end %>
+      </div>
   </div>
 
   <div class="flex flex-row items-center mb-8">
-    <div class="text-xl">行业</div>
-    <div class="filters ml-10">
-      <%= for {k,v} <- @industry_options  do %>
-        <input class="w-0 opacity-0" type="radio" name="industry" id="i<%= k %>" value="<%= v %>" <%= if k == 0, do: "checked" %>>
-        <label class="mx-2 py-2 px-3" for="i<%= k %>"><%= v %></label>
-      <% end %>
-    </div>
+      <div class="text-xl">行业</div>
+      <div class="filters ml-10">
+          <%= for {k,v} <- @industries  do %>
+              <%= live_patch v, to: Routes.live_path(
+                          @socket, 
+                          __MODULE__,
+                          category_id: @category_id,
+                          industry_id: k,
+                          sort: @sort
+                      ), 
+                      class: if @industry_id == k, do: "mx-2 py-2 px-3 active", else: "mx-2 py-2 px-3"
+              %>
+          <% end %>
+      </div>
   </div>
 
   <div class="flex flex-row items-center mb-8">
-    <div class="text-xl">格式</div>
-    <div class="filters ml-10">
-      <%= for {k,v} <- @format_options  do %>
-        <input class="w-0 opacity-0" type="radio" name="format" id="f<%= k %>" value="<%= v %>" <%= if k == 0, do: "checked" %>>
-        <label class="mx-2 py-2 px-3" for="f<%= k %>"><%= v %></label>
-      <% end %>
-    </div>
+      <div class="text-xl">排序</div>
+      <div class="filters ml-10">
+          <%= for {k,v} <- @sorts  do %>
+              <%= live_patch v, to: Routes.live_path(
+                          @socket, 
+                          __MODULE__,
+                          category_id: @category_id,
+                          industry_id: @industry_id,
+                          sort: k
+                      ), 
+                      class: if @sort == k, do: "mx-2 py-2 px-3 active", else: "mx-2 py-2 px-3"
+              %>
+          <% end %>
+      </div>
   </div>
+</div>
 
-  <div class="flex flex-row items-center mb-8">
-    <div class="text-xl">排序</div>
-    <div class="filters ml-10">
-      <%= for {k,v} <- @sort_options  do %>
-        <input class="w-0 opacity-0" type="radio" name="sort" id="s<%= k %>" value="<%= v %>" <%= if k == 0, do: "checked" %>>
-        <label class="mx-2 py-2 px-3" for="s<%= k %>"><%= v %></label>
-      <% end %>
+
+
+<div class="items">
+<div class="latest grid w-full gap-4 md:grid-cols-2 lg:grid-cols-4 justify-items-center" x-show="tab === 'latest'">
+  <%= for item <- @items do %>
+    
+
+
+    <div class="card max-w-xs rounded overflow-hidden shadow-lg my-2">
+      <a href="/items/<%= item.id  %>">
+        <img loading=lazy class="w-full" src="<%= item.cover %>" width="32px" height="32px" alt="Sunset in the mountains">
+      </a>
+      <div class="px-6 py-4">
+        <div class="font-bold text-xl mb-2"><%= item.title %></div>
+        <p class="text-grey-darker text-base">
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus quia, nulla! Maiores et perferendis eaque, exercitationem praesentium nihil.
+        </p>
+      </div>
+      <div class="px-6 py-4">
+        <span class="inline-block bg-grey-lighter rounded-full px-3 py-1 text-sm font-semibold text-grey-darker mr-2">#photography</span>
+        <span class="inline-block bg-grey-lighter rounded-full px-3 py-1 text-sm font-semibold text-grey-darker mr-2">#travel</span>
+        <span class="inline-block bg-grey-lighter rounded-full px-3 py-1 text-sm font-semibold text-grey-darker">#winter</span>
+      </div>
     </div>
-  </div>
-</form>
+  <% end %>
+    
+</div>
 </div>

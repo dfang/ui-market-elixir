@@ -10,6 +10,5 @@ defmodule Pragmatic.Repo.Migrations.CreatePartners do
 
       timestamps()
     end
-
   end
 end

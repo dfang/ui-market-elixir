@@ -7,6 +7,5 @@ defmodule Pragmatic.Repo.Migrations.CreateFiletypes do
 
       timestamps()
     end
-
   end
 end

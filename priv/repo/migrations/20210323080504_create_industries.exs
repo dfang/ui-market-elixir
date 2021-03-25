@@ -8,6 +8,5 @@ defmodule Pragmatic.Repo.Migrations.CreateIndustries do
 
       timestamps()
     end
-
   end
 end

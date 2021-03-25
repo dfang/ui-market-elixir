@@ -15,6 +15,13 @@ iframe {
   padding-right: 1rem; */
 }
 
+.filters a.active{
+  --tw-bg-opacity: 1;
+  background-color: rgba(180, 198, 252, var(--tw-bg-opacity));
+  --tw-border-opacity: 1;
+  border-color: rgba(104, 117, 245, var(--tw-border-opacity));
+}
+
 .filters input[type="radio"]:checked + label {
   --tw-bg-opacity: 1;
   background-color: rgba(180, 198, 252, var(--tw-bg-opacity));

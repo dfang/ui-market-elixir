@@ -21,8 +21,9 @@ defmodule PragmaticWeb.Router do
     # get "/", PageController, :index
     live "/", PageLive, :index
     live "/about", AboutLive, :index
-    live "/discover", DiscoverLive, :index
+    live "/discover", DiscoverLive
     live "/contact", ContactLive, :index
+    live "/items/:id", ItemLive
   end
 
   # Other scopes may use custom stacks.
