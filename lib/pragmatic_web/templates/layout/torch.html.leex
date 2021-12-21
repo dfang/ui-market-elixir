@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html :class="{ 'theme-dark': dark }" x-data="data()" lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Windmill Dashboard</title>
+    <%= csrf_meta_tag() %>
+    <%= live_title_tag assigns[:page_title] || "Lit", suffix: " Admin" %>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link phx-track-static rel="stylesheet" href="<%= Routes.static_path(@conn, "/torch/tailwind.output.css") %>">
+    <script src="https://cdn.bootcdn.net/ajax/libs/alpinejs/2.8.2/alpine.js" defer></script>
+    <script phx-track-static src="<%= Routes.static_path(@conn, "/torch/init-alpine.js")%>"></script>
+    <link href="https://cdn.bootcdn.net/ajax/libs/Chart.js/2.9.3/Chart.min.css" rel="stylesheet">
+    <script src="https://cdn.bootcdn.net/ajax/libs/Chart.js/2.9.3/Chart.min.js" defer></script>
+    <script phx-track-static src="<%= Routes.static_path(@conn, "/torch/charts-lines.js")%>" defer></script>
+    <script phx-track-static src="<%= Routes.static_path(@conn, "/torch/charts-pie.js")%>" defer></script>
+  </head>
+  <body>
+    <div class="flex h-screen bg-gray-50 dark:bg-gray-900" :class="{ 'overflow-hidden': isSideMenuOpen }" >
+
+      <%= render PragmaticWeb.Admin.SharedView, "sidebar.html", assigns %>
+
+      <div class="flex flex-col flex-1 w-full">
+
+        <%= render PragmaticWeb.Admin.SharedView, "header.html", assigns %>
+
+        <main class="h-full overflow-y-auto">
+
+          <%= @inner_content %>
+        </main>
+      </div>
+    </div>
+  </body>
+</html>

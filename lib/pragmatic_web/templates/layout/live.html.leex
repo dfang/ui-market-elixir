@@ -1,4 +1,6 @@
-<main role="main" class="container">
+<%= Phoenix.View.render PragmaticWeb.SharedView, "header.html", assigns %>
+
+<main role="main" class="container mx-auto">
   <p class="alert alert-info" role="alert"
     phx-click="lv:clear-flash"
     phx-value-key="info"><%= live_flash(@flash, :info) %></p>
@@ -7,6 +9,9 @@
     phx-click="lv:clear-flash"
     phx-value-key="error"><%= live_flash(@flash, :error) %></p>
 
+
+  <%= @inner_content %>
+
 </main>
 
-<%= @inner_content %>
+<%= Phoenix.View.render PragmaticWeb.SharedView, "footer.html", assigns %>

@@ -1,0 +1,73 @@
+
+
+
+<main class="main-content" role="main">
+    <header class="main-content__header" role="banner">
+        <h1 class="main-content__page-title">
+            查看 #<%= @partner.id %>
+        </h1>
+        <div>
+          <%= link "Back", to: Routes.admin_partner_path(@conn, :index), class: "button" %>
+          <%= link "Edit", to: Routes.admin_partner_path(@conn, :edit, @partner), class: "button" %>
+        </div>
+    </header>
+    
+    <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
+      Show Partners
+    </h2>
+
+    <section class="main-content__body">
+        <dl>
+             
+              <dt class="attribute-label" id="id">
+                Name:
+              </dt>
+
+              <dd class="attribute-data attribute-data--number">
+                <%= @partner.name %>
+              </dd>      
+            
+              <dt class="attribute-label" id="id">
+                Image:
+              </dt>
+
+              <dd class="attribute-data attribute-data--number">
+                <%= @partner.image %>
+              </dd>      
+            
+              <dt class="attribute-label" id="id">
+                Url:
+              </dt>
+
+              <dd class="attribute-data attribute-data--number">
+                <%= @partner.url %>
+              </dd>      
+            
+              <dt class="attribute-label" id="id">
+                Position:
+              </dt>
+
+              <dd class="attribute-data attribute-data--number">
+                <%= @partner.position %>
+              </dd>      
+            
+
+              <dt class="attribute-label" id="id">
+                Created At:
+              </dt>
+
+              <dd class="attribute-data attribute-data--number">
+                <%= @partner.inserted_at %>
+              </dd>
+            
+              <dt class="attribute-label" id="id">
+                Updated At:
+              </dt>
+
+              <dd class="attribute-data attribute-data--number">
+                <%= @partner.updated_at %>
+              </dd>
+        </dl>
+    </section>
+</main>
+

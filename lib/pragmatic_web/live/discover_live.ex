@@ -1,16 +1,19 @@
 defmodule PragmaticWeb.DiscoverLive do
   use PragmaticWeb, :live_view
 
-  alias Pragmatic.Models.Item
-  alias Pragmatic.Models.Category
-  alias Pragmatic.Models.Industry
-  alias Pragmatic.Models.Filetype
+  alias Pragmatic.Items
+  alias Pragmatic.Items.Item
+  alias Pragmatic.Categories.Category
+  alias Pragmatic.Industries.Industry
+  alias Pragmatic.Filetypes.Filetype
 
   import Pragmatic.Repo
   import Ecto.{Changeset, Query}
   alias Pragmatic.Repo
 
   def mount(_params, _session, socket) do
+    IO.inspect(self(), label: "MOUNT")
+
     socket =
       assign(socket,
         # type_options: type_options(),
@@ -24,12 +27,59 @@ defmodule PragmaticWeb.DiscoverLive do
         # defaults: defaults,
         category_id: 0,
         industry_id: 0,
-        filetype: 0,
         sort: 0,
-        items: []
+        filetype: 0,
+        items: Items.list_published_items()
       )
 
     {:ok, socket}
+  end
+
+  def handle_params(
+        %{
+          "category_id" => category_id,
+          "industry_id" => industry_id,
+          "filetype" => filetype,
+          "sort" => sort
+        },
+        uri,
+        socket
+      ) do
+    IO.puts("handle params")
+    IO.puts("category_id: #{category_id}")
+    IO.puts("industry_id: #{industry_id}")
+    IO.puts("sort: #{sort}")
+    IO.puts("filetype: #{filetype}")
+
+    items =
+      filter_items(%{
+        category_id: category_id,
+        industry_id: industry_id,
+        filetype: filetype,
+        sort: sort
+      })
+
+    # IO.inspect(items)
+    socket =
+      assign(socket,
+        # category_id: category_id,
+        # industry_id: industry_id,
+        uri: URI.parse(uri),
+        category_id: String.to_integer(category_id),
+        industry_id: String.to_integer(industry_id),
+        filetype: filetype,
+        sort: String.to_integer(sort),
+        items: items
+        # filetype: ""
+      )
+
+    {:noreply, socket}
+  end
+
+  def handle_params(_, uri, socket) do
+    IO.inspect(self(), label: "handle_params")
+
+    {:noreply, assign(socket, uri: URI.parse(uri), filetype: "不限")}
   end
 
   defp categories do
@@ -57,8 +107,6 @@ defmodule PragmaticWeb.DiscoverLive do
     ]
   end
 
-
-  
   # def handle_params(%{"category_id" => category_id}, _url, socket ) do
   #     IO.puts category_id
   #     # IO.puts industry_id
@@ -89,61 +137,112 @@ defmodule PragmaticWeb.DiscoverLive do
   #     {:noreply, socket}
   # end
 
-  def handle_params(%{"category_id" => category_id, "industry_id" => industry_id, "sort" => sort}, _url, socket ) do
-    IO.puts "params"
-    IO.puts category_id
-    IO.puts industry_id
-    IO.puts sort
-    items = filter_items(%{category_id: category_id, industry_id: industry_id, sort: sort})
-    # IO.inspect(items)
-    socket =
-      assign(socket,
-        # category_id: category_id,
-        # industry_id: industry_id,
+  defp filter_items(%{
+         category_id: category_id,
+         industry_id: industry_id,
+         filetype: filetype,
+         sort: sort
+       }) do
+    # base_query = from i in Item
+    IO.inspect(self(), label: "filter items")
+    IO.puts("industry_id: #{industry_id}")
+    IO.puts("category_id: #{category_id}")
+    IO.puts("filetype: #{filetype}")
 
-        category_id: String.to_integer(category_id),
-        industry_id: String.to_integer(industry_id),
-        # filetype: String.to_integer(filetype),
-        sort: String.to_integer(sort),
-        items: items,
-        filetype: "",
-      )
+    IO.puts(is_integer(industry_id))
+    IO.puts(inspect(industry_id))
 
-    {:noreply, socket}
-  end
+    query = Item
 
-  def handle_params(_, _url, socket) do
-    {:noreply, socket}
-  end
+    query =
+      if category_id == "0" || is_nil(category_id) do
+        IO.puts("category_id == 0")
+        query
+      else
+        from(query |> where([x], x.category_id == ^category_id))
+      end
 
-  defp filter_items(%{category_id: category_id, industry_id: industry_id, sort: sort}) do
-    if category_id == 0 do
-      category_id = nil
-    end
+    query =
+      if industry_id == "0" || is_nil(industry_id) do
+        IO.puts("industry_id == 0")
+        query
+      else
+        from(query |> where([x], x.industry_id == ^industry_id))
+      end
 
-    if industry_id == 0 do
-      industry_id = nil
-    end
+    query =
+      if filetype == "不限" || is_nil(filetype) do
+        query
+      else
+        # query
+        # select filetype from items where filetype::jsonb ?| array['PNG'];
+        # eg. select filetype from items where filetype::jsonb ?| array['PNG'];
+        # form(query |> where([x], fragment("filetype::jsonb ?| array['PNG']") ))
+        # type(^"\"green\"", :string)
+        # filetypes = ["AI"]
+        from p in query,
+          where: ^filetype in p.filetypes
+
+        # where: fragment("(filetypes) @> ?", ^filetypes)
+      end
+
     # {0, "最新"},
     # {1, "推荐"},
     # {2, "最热"},
     # {3, "下载量"}
-    order = case sort do
-      0 -> :inserted_at
-      1 -> :featured
-      2 -> :likes
-      3 -> :downloads
-      _ -> :inserted_at
-    end
+    order =
+      case sort do
+        "0" -> :inserted_at
+        "1" -> :featured
+        "2" -> :likes
+        "3" -> :downloads
+        _ -> :inserted_at
+      end
 
-    IO.puts "order"
-    IO.puts order
-    
-    base_query = from i in Item
-    base_query |> 
-          where([i], category_id: ^category_id) |>
-          where([i], industry_id: ^industry_id) |>
-          order_by(desc: ^order) |>
-          Repo.all
+    IO.puts(order)
+
+    query = from query, order_by: [desc: ^order]
+    results = query |> Repo.all()
+
+    # conditions = false
+    # conditions = if category_id == 0 || is_nil(category_id) do
+    #     conditions
+    # else
+    #     dynamic([p], p.category_id == 4 or ^conditions)
+    # end
+
+    # conditions = if industry_id == 0 || is_nil(industry_id) do
+    #     conditions
+    # else
+    #     dynamic([p], p.industry_id == 7 and ^conditions)
+    # end
+
+    # # {0, "最新"},
+    # # {1, "推荐"},
+    # # {2, "最热"},
+    # # {3, "下载量"}
+    # order = case sort do
+    #   0 -> :inserted_at
+    #   1 -> :featured
+    #   2 -> :likes
+    #   3 -> :downloads
+    #   _ -> :inserted_at
+    # end
+
+    # from i in Item, where: ^conditions, order_by: [desc: ^order]
   end
+
+  # defp filter_items(%{category_id: category_id, industry_id: industry_id, sort: sort}) do
+  #   IO.puts "order"
+  #   IO.puts order
+
+  #   base_query = from i in Item
+  #   base_query |> 
+  #         Items.build_query(category_id: category_id) |>
+  #         Items.build_query(industry_id: industry_id) |>
+  #         # where([i], category_id: ^category_id) |>
+  #         # where([i], industry_id: ^industry_id) |>
+  #         order_by(desc: ^order) |>
+  #         Repo.all
+  # end
 end

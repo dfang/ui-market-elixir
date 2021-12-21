@@ -6,7 +6,7 @@ defmodule Pragmatic.Repo.Migrations.CreatePartners do
       add :name, :string
       add :url, :string
       add :image, :string
-      add :positon, :integer
+      add :position, :integer
 
       timestamps()
     end

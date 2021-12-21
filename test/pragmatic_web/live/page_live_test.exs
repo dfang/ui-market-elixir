@@ -1,4 +1,4 @@
-defmodule PragmaticWeb.PageLiveTest do
+defmodule PragmaticWeb.HomeLiveTest do
   use PragmaticWeb.ConnCase
 
   import Phoenix.LiveViewTest

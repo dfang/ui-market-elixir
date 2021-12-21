@@ -12,7 +12,8 @@ defmodule Pragmatic.Repo.Migrations.CreateItems do
       add :views, :integer
       add :downloads, :integer
       add :likes, :integer
-      add :filetype, :json
+      add :filetypes, {:array, :string}
+
       add :category_id, :integer
       add :industry_id, :integer
 

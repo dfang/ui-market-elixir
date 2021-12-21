@@ -10,10 +10,11 @@
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
 
-alias Pragmatic.Models.Item
-alias Pragmatic.Models.Industry
-alias Pragmatic.Models.Category
-alias Pragmatic.Models.Filetype
+alias Pragmatic.Items.Item
+alias Pragmatic.Categories.Category
+alias Pragmatic.Industries.Industry
+alias Pragmatic.Filetypes.Filetype
+
 alias Pragmatic.Repo
 import Ecto.{Changeset, Query}
 
@@ -23,7 +24,8 @@ defmodule Myclient do
   plug Tesla.Middleware.JSON
   plug Tesla.Middleware.Headers, [{"user-agent", "Tesla"}, {"content-type", "application/json"}]
 
-  @url "https://graphql.2mui.cn/v1/graphql"
+  # @url "https://graphql.2mui.cn/v1/graphql"
+  @url "http://119.45.200.61:8080/v1/graphql"
   def post(query) do
     {:ok, response} = Tesla.post(@url, query)
     {:ok, data} = response.body |> Jason.decode()
@@ -37,12 +39,15 @@ items_query = '{
 }'
 # {:ok, items} = Tesla.post(url, items_query, headers: [{"content-type", "application/json"}])
 items = Myclient.post(items_query) |> Map.get("items")
+
 for item <- items do
-  %Item{} |> Item.changeset(Map.merge(item, %{"zip" => item["url"]})) |> Repo.insert()
+  %Item{}
+  |> Item.changeset(Map.merge(item, %{"zip" => item["url"], "filetypes" => item["filetype"]}))
+  |> Repo.insert()
 end
 
 categories_query = '{
-    "query": "{ categories {    name description  }}",
+    "query": "{ categories { name description  }}",
     "variables": null
 }'
 categories = Myclient.post(categories_query) |> Map.get("categories")
@@ -69,4 +74,32 @@ filetypes = Myclient.post(filetypes_query) |> Map.get("filetypes")
 
 for item <- filetypes do
   %Filetype{} |> Filetype.changeset(item) |> Repo.insert()
+end
+
+# fixs data
+# category_id - 7 and industry_id - 12
+Item
+|> Repo.all()
+|> Enum.map(fn x ->
+  {category_id, industry_id} = {x.category_id - 7, x.industry_id - 12}
+
+  changeset =
+    Item.changeset(x, %{
+      category_id: category_id,
+      industry_id: industry_id
+    })
+
+  {:ok, item} = Repo.update(changeset)
+end)
+
+alias Pragmatic.Partners.Partner
+
+for item <- 1..10 do
+  attrs = %{
+    name: Faker.Person.En.name(),
+    url: Faker.Internet.url(),
+    image: Faker.Avatar.image_url()
+  }
+
+  %Partner{} |> Partner.changeset(attrs) |> Repo.insert()
 end

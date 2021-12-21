@@ -1,4 +1,4 @@
-defmodule Pragmatic.Models.Case do
+defmodule Pragmatic.DataCase do
   @moduledoc """
   This module defines the setup for tests requiring
   access to the application's data layer.
@@ -10,7 +10,7 @@ defmodule Pragmatic.Models.Case do
   we enable the SQL sandbox, so changes done to the database
   are reverted at the end of every test. If you are using
   PostgreSQL, you can even run database tests asynchronously
-  by setting `use Pragmatic.Models.Case, async: true`, although
+  by setting `use Pragmatic.DataCase, async: true`, although
   this option is not recommended for other databases.
   """
 
@@ -23,7 +23,7 @@ defmodule Pragmatic.Models.Case do
       import Ecto
       import Ecto.Changeset
       import Ecto.Query
-      import Pragmatic.Models.Case
+      import Pragmatic.DataCase
     end
   end
 

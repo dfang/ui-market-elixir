@@ -37,3 +37,4 @@ npm-debug.log
 
 tmp/
 .excludes.txt
+.iex.exs

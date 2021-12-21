@@ -58,7 +58,7 @@ config :pragmatic, PragmaticWeb.Endpoint,
 config :pragmatic, PragmaticWeb.Endpoint,
   live_reload: [
     patterns: [
-      ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",
+      ~r"priv/static/.*(js|css|scss|png|jpeg|jpg|gif|svg)$",
       ~r"priv/gettext/.*(po)$",
       ~r"lib/pragmatic_web/(live|views)/.*(ex)$",
       ~r"lib/pragmatic_web/templates/.*(eex)$"
@@ -74,3 +74,6 @@ config :phoenix, :stacktrace_depth, 20
 
 # Initialize plugs at runtime for faster development compilation
 config :phoenix, :plug_init_mode, :runtime
+
+config :administrate,
+  otp_app: :pragmatic

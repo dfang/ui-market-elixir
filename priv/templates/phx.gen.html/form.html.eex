@@ -1,0 +1,21 @@
+<%%= form_for @changeset, @action, [multipart: true, id: "torch-form"], fn f -> %>
+
+  <!-- General elements -->
+  <h4 class="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">
+    Elements
+  </h4>
+
+  <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
+    <%= for {label, input, error} <- inputs, input do %>
+
+      <div class="form-group block text-sm">
+          <%= label %>
+          <%= input %>
+          <%= error %>
+      </div>
+
+    <% end %>
+
+  </div>
+
+<%% end %>

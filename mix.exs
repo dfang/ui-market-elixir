@@ -52,13 +52,18 @@ defmodule Pragmatic.MixProject do
       {:telemetry_poller, "~> 0.4"},
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
-      
+      {:torch, path: "/Users/mj/tmp/hex/torch"},
+
+      # {:administrate, "~> 0.1.0", path: "/Users/mj/tmp/hex/administrate"},
+      {:administrate, path: "/Users/mj/tmp/hex/administrate"},
+      {:credo, "~> 1.5", only: [:dev, :test], runtime: false},
+      {:credo_naming, "~> 1.0", only: [:dev, :test], runtime: false},
+
       # GraphQL API Support
       {:absinthe, "~> 1.4"},
       {:absinthe_plug, "~> 1.4"},
       {:dataloader, "~> 1.0.0"},
       {:absinthe_gen, "~> 0.2"},
-
       {:httpoison, "~> 1.8"},
       {:tesla, "~> 1.4.0"},
       {:faker, "~> 0.16.0", only: :dev},

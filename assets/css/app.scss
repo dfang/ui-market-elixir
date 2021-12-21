@@ -2,18 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-iframe {
-  display: none;
-}
-.filters a.active{
-  --tw-bg-opacity: 1;
-  background-color: rgba(180, 198, 252, var(--tw-bg-opacity));
-  --tw-border-opacity: 1;
-  border-color: rgba(104, 117, 245, var(--tw-border-opacity));
-}
-
-
-@import "./custom.css";
 
 /* LiveView specific classes for your customizations */
 .phx-no-feedback.invalid-feedback,
@@ -102,3 +90,6 @@ iframe {
   display: block;
   margin: -1rem 0 2rem;
 }
+
+
+@import "./custom.css";

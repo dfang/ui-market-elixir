@@ -4,7 +4,6 @@ defmodule PragmaticWeb.Router do
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
-    # plug :fetch_flash
     plug :fetch_live_flash
     plug :put_root_layout, {PragmaticWeb.LayoutView, :root}
     plug :protect_from_forgery
@@ -19,11 +18,18 @@ defmodule PragmaticWeb.Router do
     pipe_through :browser
 
     # get "/", PageController, :index
-    live "/", PageLive, :index
+    live "/", HomeLive, :index
     live "/about", AboutLive, :index
     live "/discover", DiscoverLive
     live "/contact", ContactLive, :index
     live "/items/:id", ItemLive
+  end
+
+  scope "/admin", PragmaticWeb.Admin, as: :admin do
+    pipe_through :browser
+    # resources "/items", ItemController
+    resources "/partners", PartnerController
+    resources "/", PartnerController
   end
 
   # Other scopes may use custom stacks.
@@ -37,12 +43,13 @@ defmodule PragmaticWeb.Router do
     forward "/", Absinthe.Plug, schema: PragmaticWeb.Schema
   end
 
-  if Mix.env == :dev do
-    forward "/graphiql", 
-      Absinthe.Plug.GraphiQL,
-      schema: PragmaticWeb.Schema
-      # interface: :simple
-      # context: %{pubsub: PragmaticWeb.Endpoint}
+  if Mix.env() == :dev do
+    forward "/graphiql",
+            Absinthe.Plug.GraphiQL,
+            schema: PragmaticWeb.Schema
+
+    # interface: :simple
+    # context: %{pubsub: PragmaticWeb.Endpoint}
   end
 
   # Enables LiveDashboard only for development

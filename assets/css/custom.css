@@ -1,3 +1,7 @@
+header {
+  margin-bottom: 80px;
+}
+
 iframe {
   display: none;
 }
@@ -14,6 +18,9 @@ iframe {
   padding-left: 1rem;
   padding-right: 1rem; */
 }
+.filters a {
+  font-size: medium;
+}
 
 .filters a.active{
   --tw-bg-opacity: 1;
@@ -27,4 +34,12 @@ iframe {
   background-color: rgba(180, 198, 252, var(--tw-bg-opacity));
   --tw-border-opacity: 1;
   border-color: rgba(104, 117, 245, var(--tw-border-opacity));
+}
+
+.menu a {
+  color: rgb(26, 25, 25);
+}
+
+.menu a.active {
+  font-weight: 600;
 }
